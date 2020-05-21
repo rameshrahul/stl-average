@@ -11,7 +11,7 @@ your_mesh = mesh.Mesh.from_file('C1_vertebra.stl')
 axes.add_collection3d(mplot3d.art3d.Poly3DCollection(your_mesh.vectors))
 
 # Auto scale to the mesh size
-scale = your_mesh.points.flatten(-1)
+scale = your_mesh.points.flatten()
 axes.auto_scale_xyz(scale, scale, scale)
 
 # Show the plot to the screen
