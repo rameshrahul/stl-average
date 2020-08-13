@@ -29,8 +29,9 @@ def scale_to_unit_sphere_ret_transform(mesh, transform=0):
 #mesh = trimesh.load('chair.obj')
 #mesh = trimesh.load('Bone1.stl')
 mesh = trimesh.load('cubes/25 mm cube.stl')
-mesh.convert_units('inches', guess=True)
-#mesh.export("normalized_cube_1.stl")
+mesh.convert_units('mm', guess=True)
+mesh.apply_scale(1/25.4)
+mesh.export("normalized_cube_1.stl")
 mesh, transform_1 = scale_to_unit_sphere_ret_transform(mesh)
 
 
@@ -42,7 +43,8 @@ cloud = get_surface_point_cloud(mesh, surface_point_method='scan', scan_count=20
 
 #mesh2 = trimesh.load('Bone2.stl')
 mesh2 = trimesh.load('cubes/Test Cube 15mm.stl')
-mesh2.convert_units('inches', guess=True)
+mesh2.convert_units('mm', guess=True)
+mesh2.apply_scale(1/25.4)
 mesh2, transform_2 = scale_to_unit_sphere_ret_transform(mesh2)
 cloud2 = get_surface_point_cloud(mesh2, surface_point_method='scan', scan_count=20, scan_resolution=400)
 #cloud2.show()
@@ -50,7 +52,8 @@ cloud2 = get_surface_point_cloud(mesh2, surface_point_method='scan', scan_count=
 
 #mesh3 = trimesh.load('Bone5.stl')
 mesh3 = trimesh.load('cubes/Test Cube 50 mm.stl')
-mesh3.convert_units('inches', guess=True)
+mesh3.convert_units('mm', guess=True)
+mesh3.apply_scale(1/25.4)
 mesh3, transform_3 = scale_to_unit_sphere_ret_transform(mesh3)
 cloud3 = get_surface_point_cloud(mesh3, surface_point_method='scan', scan_count=20, scan_resolution=400)
 #cloud3.show()
@@ -103,7 +106,7 @@ average_mesh_trimesh = trimesh.Trimesh(vertices=vertices, faces=faces, vertex_no
 
 
 
-average_mesh_trimesh.apply_scale(0.5)
+#average_mesh_trimesh.apply_scale(0.5)
 #average_mesh_trimesh, _ = scale_to_unit_sphere_ret_transform(average_mesh_trimesh, 
 #                                                          transform=1)
 
