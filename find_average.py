@@ -78,7 +78,7 @@ voxel_resolution = 100
 #inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Out of Orientation Heel.stl', 'heels/Heel 3.stl', 'heels/Diseased Heel.stl']
 #inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Heel 3.stl']
 #inputs = ['spines/trent_spine.stl', 'spines/double_cut_spine.stl']
-inputs = ['cubes/Test Cube 50 mm.stl', 'cubes/25 mm cube.stl', 'cubes/Test Cube 15mm.stl']
+inputs = ['inputs/cubes/Test Cube 50 mm.stl', 'inputs/cubes/25 mm cube.stl', 'inputs/cubes/Test Cube 15mm.stl']
 #inputs = ['cubes/Test Cube 50 mm.stl', 'cubes/25 mm cube.stl']
 #inputs = ['curved_bodies/Curved solid 1.stl', 'curved_bodies/Curved solid 2.stl']
 #inputs = ['ears/Right Ear 1.stl', 'ears/Right Ear 2.stl', 'ears/Right Ear 3.stl', 'ears/Right Ear 4.stl',]
@@ -102,7 +102,7 @@ if len(inputs) != len(weights):
 def main ():
     scale_factors = []
     
-    output_file_name = "average_cube.stl"
+    output_file_name = "outputs/average_cube_new_output.stl"
     
     mesh_list = []
     
