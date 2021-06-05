@@ -5,11 +5,11 @@ block_cipher = None
 
 
 a = Analysis(['find_average.py'],
-             pathex=['/home/rahul/projects/stl-average', '/home/rahul/anaconda3/envs/new_env/lib/python3.9/site-packages/'],
+             pathex=['C:\\Users\\rr600\\Documents\\Projects\\stl_average_project\\stl-average', 'C:\\Users\\rr600\\anaconda3\\Lib\\site-packages'],
              binaries=[],
              datas=[],
              hiddenimports=['cython','sklearn','sklearn.neighbors._typedefs', 'sklearn.utils._weight_vector', 'mesh_to_sdf'],
-             hookspath=['/home/rahul/projects/hooks'],
+             hookspath=['C:\\Users\\rr600\\Documents\\Projects\\stl_average_project\\stl-average\\hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
