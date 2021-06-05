@@ -2,7 +2,8 @@ from mesh_to_sdf import get_surface_point_cloud, mesh_to_voxels
 import trimesh
 import skimage, skimage.measure
 import numpy as np
-from tkinter.filedialog import askopenfilenames
+import tkinter as tk
+import tkinter.filedialog as fd
 import math
 
 
@@ -65,8 +66,14 @@ def apply_adjustment(mesh, file):
         mesh.vertices = trimesh.transformations.transform_points(mesh.vertices, reflection_mat)
         mesh.export('right ear reflection.stl')
         
+
     
 voxel_resolution = 100
+
+root = tk.Tk()
+
+inputs = fd.askopenfilenames(parent=root, title='Choose inputs for average')
+
 
 #inputs = ['bones/Bone1.stl', 'bones/Bone2.stl', 'bones/Bone3.stl', 'bones/Bone4.stl', 'bones/Bone5.stl']
 #inputs = ['bones/Bone1.stl']
@@ -78,7 +85,7 @@ voxel_resolution = 100
 #inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Out of Orientation Heel.stl', 'heels/Heel 3.stl', 'heels/Diseased Heel.stl']
 #inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Heel 3.stl']
 #inputs = ['spines/trent_spine.stl', 'spines/double_cut_spine.stl']
-inputs = ['inputs/cubes/Test Cube 50 mm.stl', 'inputs/cubes/25 mm cube.stl', 'inputs/cubes/Test Cube 15mm.stl']
+#inputs = ['inputs/cubes/Test Cube 50 mm.stl', 'inputs/cubes/25 mm cube.stl', 'inputs/cubes/Test Cube 15mm.stl']
 #inputs = ['cubes/Test Cube 50 mm.stl', 'cubes/25 mm cube.stl']
 #inputs = ['curved_bodies/Curved solid 1.stl', 'curved_bodies/Curved solid 2.stl']
 #inputs = ['ears/Right Ear 1.stl', 'ears/Right Ear 2.stl', 'ears/Right Ear 3.stl', 'ears/Right Ear 4.stl',]
@@ -102,7 +109,9 @@ if len(inputs) != len(weights):
 def main ():
     scale_factors = []
     
-    output_file_name = "outputs/average_cube_new_output.stl"
+    #output_file_name = "outputs/average_cube_new_output.stl"
+    output_file_name = fd.asksaveasfilename(parent=root, title='Choose output file for average. Must be .stl format') 
+    root.withdraw()
     
     mesh_list = []
     
@@ -119,14 +128,14 @@ def main ():
     avg_inverse_transform = len(scale_factors)/ (sum([1/x for x in scale_factors]))
     
     
-    print("transforms", scale_factors)
-    print("avg inverse trasnform:", avg_inverse_transform)
+    #print("transforms", scale_factors)
+    #print("avg inverse trasnform:", avg_inverse_transform)
     
     voxels_list = []
     for mesh in mesh_list:
-        print("volume before voxelizing, before scaling: {}".format(mesh.volume))
+        #print("volume before voxelizing, before scaling: {}".format(mesh.volume))
         mesh = center_and_scale(mesh, max_transform)
-        print("volume before voxelizing, after scaling: {}".format(mesh.volume))
+        #print("volume before voxelizing, after scaling: {}".format(mesh.volume))
         #cloud = get_surface_point_cloud(mesh, surface_point_method='scan',scan_count=100, scan_resolution=400, sample_point_count=10000000) #scan_count=20, scan_resolution=400)
         #voxels = cloud.get_voxels(128, use_depth_buffer=True) #normal voxel resolution: 128
         voxels = mesh_to_voxels(mesh, voxel_resolution, pad=True)
@@ -140,7 +149,7 @@ def main ():
         
     
     
-    print("Creating a mesh using Marching Cubes...")
+    #print("Creating a mesh using Marching Cubes...")
     vertices, faces, normals, _ = skimage.measure.marching_cubes_lewiner(voxels_avg, level=0, step_size=1, 
                                                                          allow_degenerate=False)
     
@@ -155,10 +164,10 @@ def main ():
     
     #apply the inverse average trasnformatino from each object
     average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/get_scale_factor(average_mesh_trimesh))
-    print(average_mesh_trimesh.volume)
+    #print(average_mesh_trimesh.volume)
     average_mesh_trimesh.apply_scale(avg_inverse_transform)  
         
-    print("volume after averaging and scaling: {}".format(average_mesh_trimesh.volume))
+    #print("volume after averaging and scaling: {}".format(average_mesh_trimesh.volume))
     
     #scale by taking the average of the inverse transforms of each object
     
