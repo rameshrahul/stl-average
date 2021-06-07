@@ -2,3 +2,5 @@ inputs/
 outputs/
 __pycache__/
 .spyproject/
+build/
+dist/
