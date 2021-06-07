@@ -4,6 +4,7 @@ import skimage, skimage.measure
 import numpy as np
 import tkinter as tk
 import tkinter.filedialog as fd
+import tkinter.messagebox as mb
 import math
 
 
@@ -70,10 +71,12 @@ def apply_adjustment(mesh, file):
     
 voxel_resolution = 100
 
+
+
+
 root = tk.Tk()
 
 inputs = fd.askopenfilenames(parent=root, title='Choose inputs for average')
-
 
 #inputs = ['bones/Bone1.stl', 'bones/Bone2.stl', 'bones/Bone3.stl', 'bones/Bone4.stl', 'bones/Bone5.stl']
 #inputs = ['bones/Bone1.stl']
@@ -111,14 +114,24 @@ def main ():
     
     #output_file_name = "outputs/average_cube_new_output.stl"
     output_file_name = fd.asksaveasfilename(parent=root, title='Choose output file for average. Must be .stl format') 
+    
+    apply_unit_scale = 'yes' == mb.askquestion("Unit", "Was the original model in inches?")
+    centroid_on_bounding_box = 'yes' == mb.askquestion("Centroid", "Should the algorithm use the bounding box centroid? No defaults to regular centroid")
+    scale_based_on_volume = 'yes' == mb.askquestion("Scaling", "Should the algorithm scale based on the mesh's volume? No defaults to vector norm")
+
+    
+    
     root.withdraw()
     
     mesh_list = []
     
+    print("loading in inputs...")
+    
     for file in inputs:
         mesh = trimesh.load(file)
         mesh.convert_units('mm', guess=True)
-        mesh.apply_scale(1/25.4)
+        if apply_unit_scale:
+            mesh.apply_scale(1/25.4)
         scale_factors.append(get_scale_factor(mesh))
         
         apply_adjustment(mesh, file)
@@ -130,6 +143,8 @@ def main ():
     
     #print("transforms", scale_factors)
     #print("avg inverse trasnform:", avg_inverse_transform)
+    
+    print("voxelizing...")
     
     voxels_list = []
     for mesh in mesh_list:
