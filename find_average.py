@@ -175,20 +175,12 @@ def main ():
     
     
     #apply the inverse average trasnformatino from each object
-    average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/get_scale_factor(average_mesh_trimesh), centroid_on_bounding_box)
+    average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/get_scale_factor(average_mesh_trimesh, scale_based_on_volume), centroid_on_bounding_box)
     #print(average_mesh_trimesh.volume)
     average_mesh_trimesh.apply_scale(avg_inverse_transform)  
         
     #print("volume after averaging and scaling: {}".format(average_mesh_trimesh.volume))
     
-    #scale by taking the average of the inverse transforms of each object
-    
-    
-    #average_mesh_trimesh.apply_scale(1/voxel_resolution)
-    #average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/max_transform, centroid_on_bounding_box)
-    
-    #average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/max_transform / get_scale_factor(average_mesh_trimesh))
-    #average_mesh_trimesh.apply_scale(1/max_transform / get_scale_factor(average_mesh_trimesh))
     
     
     
