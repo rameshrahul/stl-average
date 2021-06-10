@@ -71,44 +71,45 @@ voxel_resolution = 100
 
 
 
-root = tk.Tk()
 
-inputs = fd.askopenfilenames(parent=root, title='Choose inputs for average')
-
-#inputs = ['bones/Bone1.stl', 'bones/Bone2.stl', 'bones/Bone3.stl', 'bones/Bone4.stl', 'bones/Bone5.stl']
-#inputs = ['bones/Bone1.stl']
-#inputs = ['spheres/20 mm sphere.stl', 'spheres/30 mm sphere.stl']
-#inputs = askopenfilenames()
-#inputs = ['skulls/Half Skull 1.stl', 'skulls/Half Skull 3.stl']
-#inputs = ['skulls/CT Cleaned.stl', 'skulls/wfu_cbi_skull-clean.stl', 'skulls/Half Skull 1.stl']
-#inputs = ['vertebrae/c1.stl', 'vertebrae/c1_80.stl']
-#inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Out of Orientation Heel.stl', 'heels/Heel 3.stl', 'heels/Diseased Heel.stl']
-#inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Heel 3.stl']
-#inputs = ['spines/trent_spine.stl', 'spines/double_cut_spine.stl']
-#inputs = ['inputs/cubes/Test Cube 50 mm.stl', 'inputs/cubes/25 mm cube.stl', 'inputs/cubes/Test Cube 15mm.stl']
-#inputs = ['cubes/Test Cube 50 mm.stl', 'cubes/25 mm cube.stl']
-#inputs = ['curved_bodies/Curved solid 1.stl', 'curved_bodies/Curved solid 2.stl']
-#inputs = ['ears/Right Ear 1.stl', 'ears/Right Ear 2.stl', 'ears/Right Ear 3.stl', 'ears/Right Ear 4.stl',]
-#inputs = ['ears/Right Ear 2.stl', 'ears/Right Ear 3.stl', 'ears/Right Ear 1.stl']
-#inputs = ['cylinders/cyl_45.stl', 'cylinders/cyl_50.stl', 'cylinders/cyl_55.stl']
-weights = []
-#weights = [.66, .34]
-#weights = [.22, .22, .22, .22, .12]
-#weights = [.45, .45, .1]
-
-if len(weights) == 0:
-    weights = [1/len(inputs) for x in inputs]
     
-
-if len(inputs) != len(weights):
-    print("error, length of weights doesn't match length of inputs")
-    exit(0)
+def handle_inputs():
     
-
-
-def main ():
-    scale_factors = []
+    root = tk.Tk()
     
+    inputs = fd.askopenfilenames(parent=root, title='Choose inputs for average')
+    
+    #inputs = ['bones/Bone1.stl', 'bones/Bone2.stl', 'bones/Bone3.stl', 'bones/Bone4.stl', 'bones/Bone5.stl']
+    #inputs = ['bones/Bone1.stl']
+    #inputs = ['spheres/20 mm sphere.stl', 'spheres/30 mm sphere.stl']
+    #inputs = askopenfilenames()
+    #inputs = ['skulls/Half Skull 1.stl', 'skulls/Half Skull 3.stl']
+    #inputs = ['skulls/CT Cleaned.stl', 'skulls/wfu_cbi_skull-clean.stl', 'skulls/Half Skull 1.stl']
+    #inputs = ['vertebrae/c1.stl', 'vertebrae/c1_80.stl']
+    #inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Out of Orientation Heel.stl', 'heels/Heel 3.stl', 'heels/Diseased Heel.stl']
+    #inputs = ['heels/Heel 1.stl', 'heels/Heel 2.stl', 'heels/Heel 3.stl']
+    #inputs = ['spines/trent_spine.stl', 'spines/double_cut_spine.stl']
+    #inputs = ['inputs/cubes/Test Cube 50 mm.stl', 'inputs/cubes/25 mm cube.stl', 'inputs/cubes/Test Cube 15mm.stl']
+    #inputs = ['cubes/Test Cube 50 mm.stl', 'cubes/25 mm cube.stl']
+    #inputs = ['curved_bodies/Curved solid 1.stl', 'curved_bodies/Curved solid 2.stl']
+    #inputs = ['ears/Right Ear 1.stl', 'ears/Right Ear 2.stl', 'ears/Right Ear 3.stl', 'ears/Right Ear 4.stl',]
+    #inputs = ['ears/Right Ear 2.stl', 'ears/Right Ear 3.stl', 'ears/Right Ear 1.stl']
+    #inputs = ['cylinders/cyl_45.stl', 'cylinders/cyl_50.stl', 'cylinders/cyl_55.stl']
+    weights = []
+    #weights = [.66, .34]
+    #weights = [.22, .22, .22, .22, .12]
+    #weights = [.45, .45, .1]
+    
+    if len(weights) == 0:
+        weights = [1/len(inputs) for x in inputs]
+        
+    
+    if len(inputs) != len(weights):
+        print("error, length of weights doesn't match length of inputs")
+        exit(0)
+        
+        
+        
     #output_file_name = "outputs/average_cube_new_output.stl"
     output_file_name = fd.asksaveasfilename(parent=root, title='Choose output file for average. Must be .stl format') 
     
@@ -116,11 +117,22 @@ def main ():
     centroid_on_bounding_box = 'yes' == mb.askquestion("Centroid", "Should the algorithm use the bounding box centroid? No defaults to regular centroid")
     scale_based_on_volume = 'yes' == mb.askquestion("Scaling", "Should the algorithm scale based on the mesh's volume? No defaults to vector norm")
 
-    
-    
+
     root.withdraw()
+
+    return inputs, weights, output_file_name, apply_unit_scale, centroid_on_bounding_box, scale_based_on_volume
+
+
+
+def main ():
+    
+    
+    
+    inputs, weights, output_file_name, apply_unit_scale, centroid_on_bounding_box, scale_based_on_volume = handle_inputs()   
+    
     
     mesh_list = []
+    scale_factors = []
     
     print("loading in inputs...")
     
