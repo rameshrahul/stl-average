@@ -7,12 +7,9 @@ import tkinter.filedialog as fd
 import tkinter.messagebox as mb
 import math
 
-
-scale_based_on_volume = True
-centroid_on_bounding_box = False
     
 
-def get_scale_factor(mesh):
+def get_scale_factor(mesh, scale_based_on_volume):
     if isinstance(mesh, trimesh.Scene):
         mesh = mesh.dump().sum()
 
@@ -23,7 +20,7 @@ def get_scale_factor(mesh):
         distances = np.linalg.norm(vertices, axis=1)
         return np.max(distances)
 
-def center_and_scale(mesh, scale_factor):
+def center_and_scale(mesh, scale_factor, centroid_on_bounding_box):
     if isinstance(mesh, trimesh.Scene):
         mesh = mesh.dump().sum()
     if centroid_on_bounding_box:
@@ -132,7 +129,7 @@ def main ():
         mesh.convert_units('mm', guess=True)
         if apply_unit_scale:
             mesh.apply_scale(1/25.4)
-        scale_factors.append(get_scale_factor(mesh))
+        scale_factors.append(get_scale_factor(mesh, scale_based_on_volume))
         
         apply_adjustment(mesh, file)
         mesh_list.append(mesh)
@@ -149,7 +146,7 @@ def main ():
     voxels_list = []
     for mesh in mesh_list:
         #print("volume before voxelizing, before scaling: {}".format(mesh.volume))
-        mesh = center_and_scale(mesh, max_transform)
+        mesh = center_and_scale(mesh, max_transform, centroid_on_bounding_box)
         #print("volume before voxelizing, after scaling: {}".format(mesh.volume))
         #cloud = get_surface_point_cloud(mesh, surface_point_method='scan',scan_count=100, scan_resolution=400, sample_point_count=10000000) #scan_count=20, scan_resolution=400)
         #voxels = cloud.get_voxels(128, use_depth_buffer=True) #normal voxel resolution: 128
@@ -178,7 +175,7 @@ def main ():
     
     
     #apply the inverse average trasnformatino from each object
-    average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/get_scale_factor(average_mesh_trimesh))
+    average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/get_scale_factor(average_mesh_trimesh), centroid_on_bounding_box)
     #print(average_mesh_trimesh.volume)
     average_mesh_trimesh.apply_scale(avg_inverse_transform)  
         
@@ -188,7 +185,7 @@ def main ():
     
     
     #average_mesh_trimesh.apply_scale(1/voxel_resolution)
-    #average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/max_transform)
+    #average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/max_transform, centroid_on_bounding_box)
     
     #average_mesh_trimesh = center_and_scale(average_mesh_trimesh, 1/max_transform / get_scale_factor(average_mesh_trimesh))
     #average_mesh_trimesh.apply_scale(1/max_transform / get_scale_factor(average_mesh_trimesh))
